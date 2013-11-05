@@ -1,9 +1,11 @@
 package tigertonic
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"strings"
@@ -226,4 +228,8 @@ func (w *responseWriter) WriteHeader(status int) {
 	}
 	w.Println(w.requestID, "<")
 	w.ResponseWriter.WriteHeader(status)
+}
+
+func (w *responseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
+	return w.ResponseWriter.(http.Hijacker).Hijack()
 }
